@@ -25,10 +25,12 @@ pipeline {
                 }
             }
         }
-        stage("build image") {
+        stage("build and push image") {
             steps {
                 script {
                     buildImage 'chinmayapradhan/my-webapp:3.0'
+                    dockerLogin()
+                    dockerPush 'chinmayapradhan/my-webapp:3.0'
                 }
             }
         }
