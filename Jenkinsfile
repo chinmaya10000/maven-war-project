@@ -28,7 +28,7 @@ pipeline {
         stage("build image") {
             steps {
                 script {
-                    buildImage()
+                    buildImage 'chinmayapradhan/my-webapp:3.0'
                 }
             }
         }
