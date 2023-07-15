@@ -1,11 +1,6 @@
 #!/usr/bin/env groovy
 
-library identifier: 'jenkins-shared-library@master', retriever: modernSCM(
-        [$class: 'GitSCMSource',
-         remote: 'https://github.com/chinmaya10000/jenkins-shared-library.git'
-         credentialsId: 'git-hub-credentials'
-        ]
-)
+@Library('jenkins_shared_library')
 
 def gv
 
@@ -17,6 +12,19 @@ pipeline {
     }
 
     stages {
+        stage("increment version") {
+            steps {
+                script {
+                    echo "incrementing the app version..."
+                    sh 'mvn build-helper:parse-version versions:set \
+                        -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${nextIncrementalVersion} \
+                        versions:commit'
+                    def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
+                    def version = matcher[0][1]
+                    env.IMAGE_NAME = "$version-$BUILD_NUMBER"
+                }
+            }
+        }
         stage("init") {
             steps {
                 script {
@@ -34,9 +42,9 @@ pipeline {
         stage("build and push image") {
             steps {
                 script {
-                    buildImage 'chinmayapradhan/my-webapp:3.0'
+                    buildImage "chinmayapradhan/my-webapp:${IMAGE_NAME}"
                     dockerLogin()
-                    dockerPush 'chinmayapradhan/my-webapp:3.0'
+                    dockerPush "chinmayapradhan/my-webapp:${IMAGE_NAME}"
                 }
             }
         }
