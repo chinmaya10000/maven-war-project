@@ -1,9 +1,5 @@
 #!/usr/bin/env groovy
 
-@Library('jenkins-shared-library')
-
-def gv
-
 pipeline {
 
     agent any
@@ -25,33 +21,30 @@ pipeline {
                 }
             }
         }
-        stage("init") {
-            steps {
-                script {
-                    gv = load "script.groovy"
-                }
-            }
-        }
         stage("build war") {
             steps {
                 script {
-                    buildWar()
+                    echo "building the application..."
+                    sh 'mvn clean package'
                 }
             }
         }
         stage("build and push image") {
             steps {
                 script {
-                    buildImage "chinmayapradhan/my-webapp:${IMAGE_NAME}"
-                    dockerLogin()
-                    dockerPush "chinmayapradhan/my-webapp:${IMAGE_NAME}"
+                    echo "building the docker image..."
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh "docker build -t chinmayapradhan/my-webapp:${IMAGE_NAME} ."
+                        sh "echo $PASS | docker login -u $USER --password-stdin"
+                        sh "docker push chinmayapradhan/my-webapp:${IMAGE_NAME}"
+                    }
                 }
             }
         }
         stage("deploy") {
             steps {
                 script {
-                    gv.deployApp()
+                    echo "deploying the application...."
                 }
             }
         }
