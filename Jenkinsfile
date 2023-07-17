@@ -9,7 +9,7 @@ pipeline {
         maven 'Maven'
     }
     environment {
-        IMAGE_NAME = 'chinmayapradhan/my-webapp:1.0'
+        IMAGE_NAME = 'chinmayapradhan/my-webapp:2.0'
     }
 
     stages {
@@ -35,7 +35,9 @@ pipeline {
             steps {
                 script {
                     echo "deployinging the appliation..."
-                    def shellCmd = "bash ./server-cmds.sh"
+
+                    def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
+
                     sshagent(['ec2-server-key']) {
                         sh "scp server-cmds.sh ec2-user@18.223.125.125:/home/ec2-user"
                         sh "scp docker-compose.yml ec2-user@18.223.125.125:/home/ec2-user"
