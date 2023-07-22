@@ -18,7 +18,7 @@ pipeline {
         stage('code review') {
             steps {
                 script {
-                    withSonarQubeEnv(sonar-server-10.1) {
+                    withSonarQubeEnv(credentialsId: 'sonar-qube-token') {
                         sh "sonar:sonar"
                     }
                 }
