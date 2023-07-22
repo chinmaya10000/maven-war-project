@@ -15,6 +15,15 @@ pipeline {
                 }
             }
         }
+        stage('code review') {
+            steps {
+                script {
+                    withSonarQubeEnv(sonar-server-10.1) {
+                        sh "sonar:sonar"
+                    }
+                }
+            }
+        }
         stage('deploy') {
             steps {
                 script {
