@@ -20,7 +20,7 @@ pipeline {
                 script {
                     echo "Run SonarQube Scanner to analyze the code.."
                     withSonarQubeEnv('Sonar-Server-10.1') {
-                        sh "sonar-scanner"
+                        sh "mvn sonar-scanner"
                     }
                 }
             }
