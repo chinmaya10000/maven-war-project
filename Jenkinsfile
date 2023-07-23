@@ -15,11 +15,12 @@ pipeline {
                 }
             }
         }
-        stage('code review') {
+        stage('SonarQube Analysis') {
             steps {
                 script {
-                    withSonarQubeEnv(credentialsId: 'sonar-qube-token') {
-                        sh "mvn sonar:sonar"
+                    echo "Run SonarQube Scanner to analyze the code.."
+                    withSonarQubeEnv('Sonar-Server-10.1') {
+                        sh "sonar-scanner"
                     }
                 }
             }
