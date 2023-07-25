@@ -36,6 +36,9 @@ pipeline {
             steps {
                 script {
                     echo "deploying the application.."
+                    sshagent(['ec2-server-key']) {
+                        sh "scp -o StrictHostKeyChecking=no target/cloudbots_warproj.war ec2-user@3.12.147.158:/opt/tomcat/webapps"
+                    }
                 }
             }
         }
