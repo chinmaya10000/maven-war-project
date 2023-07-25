@@ -28,11 +28,7 @@ pipeline {
         stage('Nexus Repository Upload') {
             steps {
                 script {
-                    def nexusServer = 'nexus-repo' // The ID of the Nexus server credentials in Jenkins
-                    def nexusUrl = 'https://18.189.186.218:8081/' // URL of your Nexus repository
-                    def mavenArtifact = 'target/*.war' // The path to the artifact you want to upload
-
-                    nexusArtifactUploader(credentialsId: nexusServer, nexusUrl: nexusUrl, groupId: 'com.cloudbots.www', version: '1.0-SNAPSHOT', repository: 'warproj-snapshot-repository', file: mavenArtifact)
+                    nexusArtifactUploader artifacts: [[artifactId: 'cloudbots_warproj', classifier: '', file: 'target/cloudbots_warproj.war', type: 'war']], credentialsId: 'nexus-repo', groupId: 'com.cloudbots.www', nexusUrl: '18.189.186.218:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'warproj-snapshot-repository', version: '1.0-SNAPSHOT'
                 }
             }
         }
