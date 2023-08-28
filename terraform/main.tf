@@ -39,7 +39,7 @@ resource "aws_default_route_table" "main-rtb" {
 }
 
 resource "aws_default_security_group" "default-sg" {
-    vpc-id = aws_vpc.myapp-vpc.id
+    vpc_id = aws_vpc.myapp-vpc.id
 
     ingress {
         from_port = 22
@@ -66,7 +66,7 @@ resource "aws_default_security_group" "default-sg" {
 
 data "aws_ami" "latest-amazon-linux-image" {
     most_recent = true
-    owners = "amazon"
+    owners = ["amazon"]
     filter {
         name = "name"
         values = ["amzn2-ami-kernel-5.10-hvm-*-x86_64-gp2"]
