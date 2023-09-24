@@ -62,6 +62,10 @@ resource "aws_default_security_group" "default-sg" {
         cidr_blocks = ["0.0.0.0/0"]
         prefix_list_ids = []
     }
+
+    tags = {
+        Name: "${var.env_prefix}-default-sg"
+    }
 }
 
 data "aws_ami" "latest-amazon-linux-image" {
