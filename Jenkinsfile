@@ -21,7 +21,7 @@ pipeline {
                 script {
                     echo "calling ansible playbook to configure ec2 instances"
                     def remote = [:]
-                    remote.name = "ansible-server"
+                    remote.name = "master"
                     remote.host = "13.59.21.14"
                     remote.allowAnyHosts = true
 
