@@ -21,5 +21,5 @@ variable region {
 }
 
 variable jenkins_ip {
-    default = "52.14.58.16/32"
+    default = "18.220.53.17/32"
 }
